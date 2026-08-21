@@ -1,0 +1,63 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "copiar Recursos",
+            "type": "shell",
+            "command": "powershell",
+            "args": [
+                "-NoProfile",
+                "-Command",
+                "Copy-Item -Path '${workspaceFolder}/Recursos' -Destination '${workspaceFolder}/src/output/Recursos' -Recurse -Force"
+            ],
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "silent"
+            },
+            "detail": "Mantem a pasta Recursos atualizada junto do executavel em src/output."
+        },
+        {
+            "label": "build jogo (g++)",
+            "type": "shell",
+            "command": "C:/mingw64/bin/g++.exe",
+            "args": [
+                "-Wall",
+                "-Wextra",
+                "-g3",
+                "-std=c++17",
+                "src/Vec2.cpp",
+                "src/Rect.cpp",
+                "src/Component.cpp",
+                "src/GameObject.cpp",
+                "src/Sprite.cpp",
+                "src/Animation.cpp",
+                "src/SpriteRenderer.cpp",
+                "src/Animator.cpp",
+                "src/Zombie.cpp",
+                "src/Music.cpp",
+                "src/Game.cpp",
+                "src/State.cpp",
+                "src/main.cpp",
+                "-I", "include",
+                "-I", "C:/SDL3-3.4.14/include",
+                "-L", "C:/SDL3-3.4.14/lib",
+                "-lSDL3",
+                "-lSDL3_image",
+                "-lSDL3_ttf",
+                "-lSDL3_mixer",
+                "-o", "${workspaceFolder}/src/output/jogo.exe"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": ["$gcc"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOn": ["copiar Recursos"],
+            "dependsOrder": "sequence",
+            "detail": "Compila todos os .cpp do projeto e linka com SDL3, SDL3_image, SDL3_ttf, SDL3_mixer."
+        }
+    ]
+}

@@ -82,7 +82,7 @@ State& Game::GetState() {
 
 void Game::Run() {
     while (!state->QuitRequested()) {
-        state->Update(0);
+        state->Update(1);
         state->Render();
 
         SDL_RenderPresent(renderer);

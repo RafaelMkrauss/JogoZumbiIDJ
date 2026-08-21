@@ -1,19 +1,45 @@
 #include "State.h"
+#include "SpriteRenderer.h"
+#include "Zombie.h"
 
 #define INCLUDE_SDL
 #include "SDL_include.h"
 
-State::State() : bg("Recursos/img/Background (3).png"), music("Recursos/audio/BGM (3).wav") {
+State::State() : music("Recursos/audio/BGM (3).wav") {
     quitRequested = false;
+
+    GameObject* go = new GameObject();
+    SpriteRenderer* spriteRenderer = new SpriteRenderer(*go, "Recursos/img/Background (3).png");
+    go->AddComponent(spriteRenderer);
+    AddObject(go);
+
+    GameObject* zb = new GameObject();
+    Zombie* zombie = new Zombie(*zb);
+    zb->AddComponent(zombie);
+    zb->box.x = 600;
+    zb->box.y = 450;
+    AddObject(zb);
+
     music.Play();
 }
 
+State::~State() {
+    objectArray.clear();
+}
+
 void State::LoadAssets() {
-    
+
+}
+
+void State::AddObject(GameObject* go) {
+    objectArray.emplace_back(go);
 }
 
 void State::Update(float dt) {
-    (void)dt; 
+   
+    for (unsigned i = 0; i < objectArray.size(); i++) {
+        objectArray[i]->Update(dt);
+    }
 
     
     SDL_Event event;
@@ -22,10 +48,19 @@ void State::Update(float dt) {
             quitRequested = true;
         }
     }
+
+    
+    for (int i = (int)objectArray.size() - 1; i >= 0; i--) {
+        if (objectArray[i]->IsDead()) {
+            objectArray.erase(objectArray.begin() + i);
+        }
+    }
 }
 
 void State::Render() {
-    bg.Render(0, 0);
+    for (unsigned i = 0; i < objectArray.size(); i++) {
+        objectArray[i]->Render();
+    }
 }
 
 bool State::QuitRequested() {

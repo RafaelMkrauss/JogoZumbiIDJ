@@ -8,10 +8,14 @@ Sprite::Sprite() {
     texture = nullptr;
     width = 0;
     height = 0;
+    frameCountW = 1;
+    frameCountH = 1;
 }
 
-Sprite::Sprite(std::string file) {
+Sprite::Sprite(std::string file, int frameCountW, int frameCountH) {
     texture = nullptr;
+    this->frameCountW = frameCountW;
+    this->frameCountH = frameCountH;
     Open(file);
 }
 
@@ -34,7 +38,7 @@ void Sprite::Open(std::string file) {
     width = texture->w;
     height = texture->h;
 
-    SetClip(0, 0, width, height);
+    SetFrame(0);
 }
 
 void Sprite::SetClip(int x, int y, int w, int h) {
@@ -44,7 +48,7 @@ void Sprite::SetClip(int x, int y, int w, int h) {
     clipRect.h = h;
 }
 
-void Sprite::Render(int x, int y) {
+void Sprite::Render(int x, int y, int w, int h) {
     SDL_FRect srcRect;
     srcRect.x = (float)clipRect.x;
     srcRect.y = (float)clipRect.y;
@@ -54,20 +58,39 @@ void Sprite::Render(int x, int y) {
     SDL_FRect dstRect;
     dstRect.x = (float)x;
     dstRect.y = (float)y;
-    dstRect.w = (float)clipRect.w;
-    dstRect.h = (float)clipRect.h;
+    dstRect.w = (float)w;
+    dstRect.h = (float)h;
 
     SDL_RenderTexture(Game::GetInstance().GetRenderer(), texture, &srcRect, &dstRect);
 }
 
 int Sprite::GetWidth() {
-    return width;
+    return width / frameCountW;
 }
 
 int Sprite::GetHeight() {
-    return height;
+    return height / frameCountH;
 }
 
 bool Sprite::IsOpen() {
     return texture != nullptr;
+}
+
+void Sprite::SetFrame(int frame) {
+    int frameWidth = width / frameCountW;
+    int frameHeight = height / frameCountH;
+
+    int frameX = (frame % frameCountW) * frameWidth;
+    int frameY = (frame / frameCountW) * frameHeight;
+
+    if (frameX + frameWidth > width || frameY + frameHeight > height) {
+        return;
+    }
+
+    SetClip(frameX, frameY, frameWidth, frameHeight);
+}
+
+void Sprite::SetFrameCount(int frameCountW, int frameCountH) {
+    this->frameCountW = frameCountW;
+    this->frameCountH = frameCountH;
 }
