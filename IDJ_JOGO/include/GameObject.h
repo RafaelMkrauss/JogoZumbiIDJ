@@ -38,4 +38,4 @@ private:
     bool isDead;
 };
 
-#endif // GAMEOBJECT_H
+#endif

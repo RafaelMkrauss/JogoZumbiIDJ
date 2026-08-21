@@ -1,7 +1,3 @@
-
-/************************************************
-*				    SDL.h						*
-*************************************************/
 #ifdef INCLUDE_SDL
 	#ifdef _WIN32
 		#include <SDL3/SDL.h>
@@ -14,12 +10,9 @@
 		#error "Unknown compiler"
 	#endif
 	#undef INCLUDE_SDL
-#endif // INCLUDE_SDL
+#endif
 
 
-/************************************************
-*				 SDL_image.h					*
-*************************************************/
 #ifdef INCLUDE_SDL_IMAGE
 	#ifdef _WIN32
 		#include <SDL3_image/SDL_image.h>
@@ -32,12 +25,9 @@
 		#error "Unknown compiler"
 	#endif
 	#undef INCLUDE_SDL_IMAGE
-#endif // INCLUDE_SDL_IMAGE
+#endif
 
 
-/************************************************
-*				 SDL_mixer.h					*
-*************************************************/
 #ifdef INCLUDE_SDL_MIXER
 	#ifdef _WIN32
 		#include <SDL3_mixer/SDL_mixer.h>
@@ -50,12 +40,9 @@
 		#error "Unknown compiler"
 	#endif
 	#undef INCLUDE_SDL_MIXER
-#endif // INCLUDE_SDL_MIXER
+#endif
 
 
-/************************************************
-*				 SDL_ttf.h						*
-*************************************************/
 #ifdef INCLUDE_SDL_TTF
 	#ifdef _WIN32
 		#include <SDL3_ttf/SDL_ttf.h>
@@ -68,4 +55,4 @@
 		#error "Unknown compiler"
 	#endif
 	#undef INCLUDE_SDL_TTF
-#endif // INCLUDE_SDL_TTF
+#endif
