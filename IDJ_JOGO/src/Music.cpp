@@ -1,5 +1,6 @@
 #include "Music.h"
 #include "Game.h"
+#include "Resources.h"
 
 #include <iostream>
 
@@ -20,29 +21,20 @@ Music::~Music() {
     if (track != nullptr) {
         MIX_DestroyTrack(track);
     }
-    if (music != nullptr) {
-        MIX_DestroyAudio(music);
-    }
 }
 
 void Music::Open(std::string file) {
-    if (music != nullptr) {
-        MIX_DestroyAudio(music);
-        music = nullptr;
-    }
-
-    MIX_Mixer* mixer = Game::GetInstance().GetMixer();
-
-    music = MIX_LoadAudio(mixer, file.c_str(), false);
+    music = Resources::GetMusic(file);
     if (music == nullptr) {
-        std::cerr << "Erro ao carregar musica '" << file << "': " << SDL_GetError() << "\n";
         return;
     }
 
-    track = MIX_CreateTrack(mixer);
     if (track == nullptr) {
-        std::cerr << "Erro ao criar track de audio: " << SDL_GetError() << "\n";
-        return;
+        track = MIX_CreateTrack(Game::GetInstance().GetMixer());
+        if (track == nullptr) {
+            std::cerr << "Erro ao criar track de audio: " << SDL_GetError() << "\n";
+            return;
+        }
     }
 
     MIX_SetTrackAudio(track, music);
