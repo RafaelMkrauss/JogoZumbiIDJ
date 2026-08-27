@@ -8,27 +8,34 @@
 class State;
 struct MIX_Mixer;
 
-class Game {
+class Game
+{
 public:
     ~Game();
 
-    static Game& GetInstance();
+    static Game &GetInstance();
 
     void Run();
 
-    SDL_Renderer* GetRenderer();
-    MIX_Mixer* GetMixer();
-    State& GetState();
+    SDL_Renderer *GetRenderer();
+    MIX_Mixer *GetMixer();
+    State &GetState();
+
+    float GetDeltaTime();
 
 private:
     Game(std::string title, int width, int height);
 
-    static Game* instance;
+    static Game *instance;
 
-    SDL_Window* window;
-    SDL_Renderer* renderer;
-    MIX_Mixer* mixer;
-    State* state;
+    SDL_Window *window;
+    SDL_Renderer *renderer;
+    MIX_Mixer *mixer;
+    State *state;
+
+    int frameStart;
+    float dt;
+    void CalculateDeltaTime();
 };
 
 #endif

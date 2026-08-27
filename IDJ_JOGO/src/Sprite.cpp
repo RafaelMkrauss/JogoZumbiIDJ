@@ -1,8 +1,9 @@
 #include "Sprite.h"
 #include "Game.h"
 #include "Resources.h"
+#include "Camera.h"
 
-Sprite::Sprite() {
+Sprite::Sprite() : cameraFollower(false) {
     texture = nullptr;
     width = 0;
     height = 0;
@@ -10,7 +11,7 @@ Sprite::Sprite() {
     frameCountH = 1;
 }
 
-Sprite::Sprite(std::string file, int frameCountW, int frameCountH) {
+Sprite::Sprite(std::string file, int frameCountW, int frameCountH) : cameraFollower(false) {
     texture = nullptr;
     this->frameCountW = frameCountW;
     this->frameCountH = frameCountH;
@@ -47,8 +48,13 @@ void Sprite::Render(int x, int y, int w, int h) {
     srcRect.h = (float)clipRect.h;
 
     SDL_FRect dstRect;
-    dstRect.x = (float)x;
-    dstRect.y = (float)y;
+    if (cameraFollower) {
+        dstRect.x = (float)x;
+        dstRect.y = (float)y;
+    } else {
+        dstRect.x = (float)x - Camera::pos.x;
+        dstRect.y = (float)y - Camera::pos.y;
+    }
     dstRect.w = (float)w;
     dstRect.h = (float)h;
 

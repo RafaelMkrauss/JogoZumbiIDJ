@@ -23,6 +23,10 @@ void SpriteRenderer::SetFrame(int frame) {
     sprite.SetFrame(frame);
 }
 
+void SpriteRenderer::SetCameraFollower(bool value) {
+    sprite.cameraFollower = value;
+}
+
 void SpriteRenderer::Update(float dt) {
     (void)dt;
 }

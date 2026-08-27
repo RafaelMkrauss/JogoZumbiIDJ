@@ -1,5 +1,6 @@
 #include "TileMap.h"
 #include "GameObject.h"
+#include "Camera.h"
 
 #include <fstream>
 #include <sstream>
@@ -29,10 +30,16 @@ void TileMap::Load(std::string file) {
     for (int i = 0; i < (int)tileMatrix.size(); i++) {
         ss >> tileMatrix[i];
     }
+
+    parallax.assign(mapDepth, 1.0f);
 }
 
 void TileMap::SetTileSet(TileSet* tileSet) {
     this->tileSet.reset(tileSet);
+}
+
+void TileMap::SetParallax(int layer, float factor) {
+    parallax[layer] = factor;
 }
 
 int& TileMap::At(int x, int y, int z) {
@@ -47,6 +54,7 @@ void TileMap::Update(float dt) {
 void TileMap::RenderLayer(int layer) {
     int tileWidth = tileSet->GetTileWidth();
     int tileHeight = tileSet->GetTileHeight();
+    float factor = parallax[layer];
 
     for (int y = 0; y < mapHeight; y++) {
         for (int x = 0; x < mapWidth; x++) {
@@ -55,10 +63,13 @@ void TileMap::RenderLayer(int layer) {
                 continue;
             }
 
-            float posX = associated.box.x + x * tileWidth;
-            float posY = associated.box.y + y * tileHeight;
+            float worldX = associated.box.x + x * tileWidth;
+            float worldY = associated.box.y + y * tileHeight;
 
-            tileSet->RenderTile((unsigned)tileIndex, posX, posY);
+            float renderX = worldX + Camera::pos.x * (1.0f - factor);
+            float renderY = worldY + Camera::pos.y * (1.0f - factor);
+
+            tileSet->RenderTile((unsigned)tileIndex, renderX, renderY);
         }
     }
 }

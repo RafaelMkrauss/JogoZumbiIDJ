@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "State.h"
 #include "Resources.h"
+#include "InputManager.h"
 
 #define INCLUDE_SDL_IMAGE
 #include "SDL_include.h"
@@ -29,6 +30,9 @@ Game::Game(std::string title, int width, int height) {
         std::cerr << "Erro ao inicializar SDL: " << SDL_GetError() << "\n";
         exit(1);
     }
+
+    frameStart = (int)SDL_GetTicks();
+    dt = 0;
 
 
     if (!MIX_Init()) {
@@ -81,9 +85,22 @@ State& Game::GetState() {
     return *state;
 }
 
+void Game::CalculateDeltaTime() {
+    int currentFrame = (int)SDL_GetTicks();
+    dt = (currentFrame - frameStart) / 1000.0f;
+    frameStart = currentFrame;
+}
+
+float Game::GetDeltaTime() {
+    return dt;
+}
+
 void Game::Run() {
     while (!state->QuitRequested()) {
-        state->Update(1);
+        CalculateDeltaTime();
+        InputManager::GetInstance().Update();
+
+        state->Update(dt);
         state->Render();
 
         SDL_RenderPresent(renderer);

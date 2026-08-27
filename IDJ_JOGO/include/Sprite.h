@@ -27,6 +27,8 @@ public:
 
     bool IsOpen();
 
+    bool cameraFollower;
+
 private:
     SDL_Texture *texture;
     int width;
