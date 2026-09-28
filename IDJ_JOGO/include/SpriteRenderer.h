@@ -14,8 +14,10 @@ public:
 
     void Open(std::string file);
     void SetFrameCount(int frameCountW, int frameCountH);
-    void SetFrame(int frame);
+    void SetFrame(int frame, SDL_FlipMode flip);
     void SetCameraFollower(bool value);
+
+    void SetScale(float scaleX, float scaleY);
 
     void Update(float dt) override;
     void Render() override;

@@ -3,6 +3,7 @@
 
 #define INCLUDE_SDL
 #include "SDL_include.h"
+#include "Vec2.h"
 #include <string>
 
 class Sprite
@@ -16,11 +17,17 @@ public:
 
     void SetClip(int x, int y, int w, int h);
 
-    void Render(int x, int y, int w, int h);
+    void Render(int x, int y, int w, int h, float angle = 0);
 
     void SetFrame(int frame);
 
     void SetFrameCount(int frameCountW, int frameCountH);
+
+    void SetScale(float scaleX, float scaleY);
+
+    Vec2 GetScale();
+
+    void SetFlip(SDL_FlipMode flip);
 
     int GetWidth();
     int GetHeight();
@@ -36,6 +43,9 @@ private:
     SDL_Rect clipRect;
     int frameCountW;
     int frameCountH;
+
+    SDL_FlipMode flip;
+    Vec2 scale;
 };
 
 #endif

@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-GameObject::GameObject() : isDead(false) {}
+GameObject::GameObject() : angleDeg(0), z(0), depthOffset(0), isDead(false), started(false) {}
 
 GameObject::~GameObject() {
     
@@ -34,6 +34,9 @@ void GameObject::RequestDelete() {
 
 void GameObject::AddComponent(Component* cpt) {
     components.push_back(cpt);
+    if (started) {
+        cpt->Start();
+    }
 }
 
 void GameObject::RemoveComponent(Component* cpt) {
@@ -42,4 +45,12 @@ void GameObject::RemoveComponent(Component* cpt) {
         delete *it;
         components.erase(it);
     }
+}
+
+void GameObject::Start() {
+    
+    for (unsigned i = 0; i < components.size(); i++) {
+        components[i]->Start();
+    }
+    started = true;
 }

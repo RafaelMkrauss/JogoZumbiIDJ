@@ -21,6 +21,7 @@ SDL_Texture* Resources::GetImage(std::string file) {
         std::cerr << "Erro ao carregar imagem '" << file << "': " << SDL_GetError() << "\n";
         return nullptr;
     }
+    SDL_SetTextureScaleMode(texture, SDL_SCALEMODE_NEAREST);
 
     imageTable.insert({file, texture});
     return texture;
@@ -63,6 +64,9 @@ MIX_Audio* Resources::GetSound(std::string file) {
     }
 
     MIX_Audio* chunk = MIX_LoadAudio(Game::GetInstance().GetMixer(), file.c_str(), true);
+    if (chunk == nullptr) {
+        chunk = MIX_LoadAudio(Game::GetInstance().GetMixer(), file.c_str(), false);
+    }
     if (chunk == nullptr) {
         std::cerr << "Erro ao carregar som '" << file << "': " << SDL_GetError() << "\n";
         return nullptr;

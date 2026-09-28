@@ -20,11 +20,14 @@ public:
 private:
     std::unordered_map<std::string, Animation> animations;
 
+    std::string current;
+
     int frameStart;
     int frameEnd;
     float frameTime;
     int currentFrame;
     float timeElapsed;
+    SDL_FlipMode flip;
 };
 
 #endif
